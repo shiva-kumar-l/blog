@@ -11,8 +11,31 @@ app.use(cors())
 // Middleware
 app.use(bodyParser.json());
 
+// Allowed frontend URLs
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://shiva-bulk-mail.vercel.app",
+];
+
+// CORS configuration
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
+
 // MongoDB Connection
-mongoose.connect('mongodb://localhost:27017/blogDB').then(()=>{
+mongoose.connect('mongodb+srv://shiva:CqHI9hBqe4MDcl0q@mbd-practice.vvxugii.mongodb.net/?appName=mbd-practice').then(()=>{
     console.log("Connection Successfull")
 })
 
